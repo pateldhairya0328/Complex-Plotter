@@ -100,7 +100,7 @@ This is the my version of a plot (very similar to) the example image on the Wiki
 over [-1.5, 1.5]×[-1.5, 1.5]
 
 This is the plot of the z-transform of a simple digital notch filter, with notches at 10 frequencies. Notice how the magnitude
-is mostly constant except for at the notching frequencies where it drops to 0 suddenly, which is the intended behaviour of a notching filter (to filter out some specific frequencies).
+is mostly constant around the unit circle except for at the notching frequencies where it drops to 0 suddenly, which is the intended behaviour of a notching filter (to filter out specific frequencies).
 
 <a href="https://imgur.com/m3zdfK6"><img src="https://i.imgur.com/m3zdfK6.jpg" title="source: imgur.com" /></a>
 
