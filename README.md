@@ -28,6 +28,7 @@ The phase, or argument, of the function is given by the *hue* of the color in th
 * 4π/3: Blue
 * 3π/2: Violet (negative imaginary number)
 * 5π/3: Purple
+
 While this is a useful tool, it can be quite hard to accurately distinguish hues, especially since humans don't interpret each hue equally.
 To help better analyze the phase, the `equiAngleLines` variable can be set to `true`. This will create white streaks in the image that 
 connect equal phase points of f(z), as can be seen below, with streaks for each phase which is an integer multiple of π/6, giving 
@@ -62,7 +63,6 @@ is implemented by approximating a notch filter using some lines, which is why th
 
 The HSV to RGB conversion is done according to the algorithm given on [Wikipedia](https://en.wikipedia.org/wiki/HSL_and_HSV#HSV_to_RGB)
 
-
 ## Next Steps 
 
 The plan is to eventually be able to supply all necessary arguments from the command line, but I would need to work on a command 
@@ -92,7 +92,7 @@ over [-1.5, 1.5]×[-1.5, 1.5]
 * ![Equation](https://latex.codecogs.com/gif.latex?\frac{\left(z^{2}-1\right)\left(z-2-i\right)^{2}}{z^{2}&plus;2&plus;2i})
 over [-1.5, 1.5]×[-1.5, 1.5]
 
-This is the my version of a plot (very similar to) the example image on the Wikipedia page for [Domain Coloring](https://en.wikipedia.org/wiki/Domain_coloring)
+This is the my version of (a plot very similar to) the example image on the Wikipedia page for [Domain Coloring](https://en.wikipedia.org/wiki/Domain_coloring)
 
 <a href="https://imgur.com/h4gD6ai"><img src="https://i.imgur.com/h4gD6ai.jpg" title="source: imgur.com" /></a>
 
@@ -100,7 +100,7 @@ This is the my version of a plot (very similar to) the example image on the Wiki
 over [-1.5, 1.5]×[-1.5, 1.5]
 
 This is the plot of the z-transform of a simple digital notch filter, with notches at 10 frequencies. Notice how the magnitude
-is mostly constant around the unit circle except for at the notching frequencies where it drops to 0 suddenly, which is the intended behaviour of a notching filter (to filter out specific frequencies).
+is mostly constant around the unit circle except for at the notching frequencies where it drops to 0 suddenly, which is the intended behaviour of a notching filter (to filter out specific frequencies). Also, there is massive phase shifting near the notching frequencies, which could be an issue, with little phase shift everywhere else.
 
 <a href="https://imgur.com/m3zdfK6"><img src="https://i.imgur.com/m3zdfK6.jpg" title="source: imgur.com" /></a>
 
@@ -121,15 +121,14 @@ The periodic poles at every non-positive integer for the gamma function can be s
 * ![Equation](https://latex.codecogs.com/gif.latex?\frac{1}{\Gamma(z)})
 over [-5, 5]×[-5, 5]
 
-This plot is remarkably similar to the previous, since taking the inverse only changes the sign of the magnitude, and the phase by 
-π, which can easily be seen here by comparing the hues and values. You can also verify that the inverse of the gamma function is an entire function, as there is an absence of singularities.
+This plot is remarkably similar to the previous, since taking the inverse only changes the sign of the log of the magnitude, and the phase by π, which can easily be seen here by comparing the hues and values. You can also verify that the inverse of the gamma function is an entire function, as there is an absence of singularities.
 
 <a href="https://imgur.com/wkJab2X"><img src="https://i.imgur.com/wkJab2X.jpg" title="source: imgur.com" /></a>
 
 * ![Equation](https://latex.codecogs.com/gif.latex?\arcsin\left(z\right))
 over [-5, 5]×[-5, 5]
 
-The location of where the branch cuts need to be made can be seen here where there is an abrupt change in hue.
+The location of where the branch cuts need to be made can be seen, along the real axis for abs(Re(z)) > 1,  here where there is an abrupt change in hue.
 
 <a href="https://imgur.com/V3XaqDo"><img src="https://i.imgur.com/V3XaqDo.jpg" title="source: imgur.com" /></a>
 
@@ -141,7 +140,7 @@ over [-4, 4]×[-4, 4]
 * ![Equation](https://latex.codecogs.com/gif.latex?\ln\left(z\right))
 over [-5, 5]×[-5, 5]
 
-Another example that illustrates where a branch cut would need to be made.
+Another example that illustrates where a branch cut would need to be made, along the real axis for Re(z) < 0
 
 <a href="https://imgur.com/NQ4ilhZ"><img src="https://i.imgur.com/NQ4ilhZ.jpg" title="source: imgur.com" /></a>
 
@@ -155,6 +154,6 @@ The plot for the 7th degree Butterworth polynomial of a low pass Butterworth fil
 * ![Equation](https://latex.codecogs.com/gif.latex?\frac{\sin\left(z^{3}-1\right)}{z})
 over [-2, 2]×[-2, 2]
 
-Just a fun function plot. The rotational symmetry with period 2π/3 can be seen, and the reason is the exponent of 3 on z for the argument to sine. The three zeros of the argument of sine (which also produce 0 for sine) can also be seen. Furthermore, it can be seen that the function behaves roughly like (z^3-1)/z near the center, due to the small angle approximation.
+Just a fun function plot. The rotational symmetry with period 2π/3 can be seen, and the reason is the exponent of 3 on z for the argument to sine. The three zeros of the argument of sine (which also produce 0 for sine) can also be seen. Furthermore, it can be seen that the function behaves roughly like 1/z near the center, due to the small angle approximation and z^3 being more insignificant
 
 <a href="https://imgur.com/IF4PDJV"><img src="https://i.imgur.com/IF4PDJV.jpg" title="source: imgur.com" /></a>
