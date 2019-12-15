@@ -7,6 +7,8 @@ plot using the rational function:
 
 ![equation](https://latex.codecogs.com/gif.latex?\inline&space;f(z)=(z&plus;3&plus;5i)(z-7i)^2&space;\left&space;(&space;\frac{1}{z}&plus;\frac{i}{(z-5-3i)^3}&space;\right&space;))
 
+in the domain [-10, 10] x [-10, 10]
+
 ## Magnitude
 
 The magnitude is indicated by *value* of the color in the HSV color system, with lower value (darker shades) representing a smaller
@@ -58,3 +60,58 @@ idea, since it can possibly make the image too busy.
 
 <a href="https://imgur.com/wqybGnU"><img src="https://i.imgur.com/wqybGnU.jpg" title="source: imgur.com" /></a>
 
+## Examples
+Some more examples that illustrate various 
+
+* ![Equation](https://latex.codecogs.com/gif.latex?\frac{\left(z&plus;1\right)\left(z&plus;i\right)}{\left(z-1\right)\left(z-i\right)})
+over [-1.5, 1.5]x[-1.5, 1.5]
+
+<a href="https://imgur.com/CNtLLNU"><img src="https://i.imgur.com/CNtLLNU.jpg" title="source: imgur.com" /></a>
+
+* ![Equation](https://latex.codecogs.com/gif.latex?\exp\left(\frac{1}{z}\right))
+
+<a href="https://imgur.com/7u5jNpL"><img src="https://i.imgur.com/7u5jNpL.jpg" title="source: imgur.com" /></a>
+
+* ![Equation](https://latex.codecogs.com/gif.latex?\frac{z^{2}&plus;1}{z^{2}-1})
+
+<a href="https://imgur.com/9ydcbxW"><img src="https://i.imgur.com/9ydcbxW.jpg" title="source: imgur.com" /></a>
+
+* ![Equation](https://latex.codecogs.com/gif.latex?\frac{\left(z^{2}-1\right)\left(z-2-i\right)^{2}}{z^{2}&plus;2&plus;2i})
+
+<a href="https://imgur.com/h4gD6ai"><img src="https://i.imgur.com/h4gD6ai.jpg" title="source: imgur.com" /></a>
+
+* ![Equation](https://latex.codecogs.com/gif.latex?\frac{1-z^{-10}}{1-0.9^{10}z^{-10}})
+
+<a href="https://imgur.com/m3zdfK6"><img src="https://i.imgur.com/m3zdfK6.jpg" title="source: imgur.com" /></a>
+
+* ![Equation](https://latex.codecogs.com/gif.latex?z^{2}&plus;2\bar{z}&plus;1)
+
+<a href="https://imgur.com/6hjYJcS"><img src="https://i.imgur.com/6hjYJcS.jpg" title="source: imgur.com" /></a>
+
+* ![Equation](https://latex.codecogs.com/gif.latex?\Gamma(z))
+
+<a href="https://imgur.com/10uHSVH"><img src="https://i.imgur.com/10uHSVH.jpg" title="source: imgur.com" /></a>
+
+* ![Equation](https://latex.codecogs.com/gif.latex?\frac{1}{\Gamma(z)})
+
+<a href="https://imgur.com/wkJab2X"><img src="https://i.imgur.com/wkJab2X.jpg" title="source: imgur.com" /></a>
+
+* ![Equation](https://latex.codecogs.com/gif.latex?\arcsin\left(z\right))
+
+<a href="https://imgur.com/V3XaqDo"><img src="https://i.imgur.com/V3XaqDo.jpg" title="source: imgur.com" /></a>
+
+* ![Equation](https://latex.codecogs.com/gif.latex?z&plus;\frac{1}{z})
+
+<a href="https://imgur.com/qoT6Ngr"><img src="https://i.imgur.com/qoT6Ngr.jpg" title="source: imgur.com" /></a>
+
+* ![Equation](https://latex.codecogs.com/gif.latex?\ln\left(z\right))
+
+<a href="https://imgur.com/NQ4ilhZ"><img src="https://i.imgur.com/NQ4ilhZ.jpg" title="source: imgur.com" /></a>
+
+* ![Equation](https://latex.codecogs.com/gif.latex?\left(1&plus;z\right)\left(1&plus;0.445z&plus;z^{2}\right)\left(1&plus;1.247z&plus;z^{2}\right)\left(1&plus;1.8019z&plus;z^{2}\right))
+
+<a href="https://imgur.com/7VFcTRL"><img src="https://i.imgur.com/7VFcTRL.jpg" title="source: imgur.com" /></a>
+
+* ![Equation](https://latex.codecogs.com/gif.latex?\frac{\sin\left(z^{3}-1\right)}{z})
+
+<a href="https://imgur.com/IF4PDJV"><img src="https://i.imgur.com/IF4PDJV.jpg" title="source: imgur.com" /></a>
