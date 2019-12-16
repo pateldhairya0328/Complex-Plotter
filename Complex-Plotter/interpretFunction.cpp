@@ -11,7 +11,18 @@ void initFunc(std::string infix) {
 	for (int i = 0; i < infix.size(); i++) {
 		if (infix[i] == '\\') {
 			int j = getOp(infix, i);
-			infixVec.push_back(infix.substr(i + 1, j - i - 1));
+			std::string temp = infix.substr(i + 1, j - i - 1);
+			std::replace(temp.begin(), temp.end(), '[', '(');
+			std::replace(temp.begin(), temp.end(), ']', ')');
+			infixVec.push_back(temp);
+			i = j - 1;
+		}
+		else if (infix[i] == '[') {
+			int j = getOp(infix, i);
+			std::string temp = infix.substr(i, j - i);
+			std::replace(temp.begin(), temp.end(), '[', '(');
+			std::replace(temp.begin(), temp.end(), ']', ')');
+			infixVec.push_back(temp);
 			i = j - 1;
 		}
 		else {
@@ -23,7 +34,6 @@ void initFunc(std::string infix) {
 	for (std::vector<std::string>::iterator it = infixVec.begin(); it != infixVec.end(); it++) {
 		std::string token = *it;
 		std::complex<double> value;
-
 		int code = getOpCode(token);
 
 		if (code == -1) {
@@ -54,9 +64,9 @@ void initFunc(std::string infix) {
 		}
 		else if (code >= 0 && code <= 4) {
 			while (!opStack.empty() &&
-				((opStack.top() > 5)
-					|| ((code == 0 || code == 1) && (opStack.top() == 0 || opStack.top() == 1))
-					|| ((code == 2 || code == 3) && (opStack.top() == 2 || opStack.top() == 3)))) {
+				((opStack.top() >= code)
+					|| ((code == 0 || code == 1) && (opStack.top() == 0))
+					|| ((code == 2 || code == 3) && (opStack.top() == 2)))) {
 				expr.push_back({ opStack.top() <= 4 ? 3 : 2, 0.0, opStack.top() });
 				opStack.pop();
 			}
@@ -66,8 +76,8 @@ void initFunc(std::string infix) {
 			opStack.push(code);
 		}
 		else if (code == -2) {
-			while (opStack.top() != -3) {
-				expr.push_back({ opStack.top() <= 3 ? 3 : 2, 0.0, opStack.top() });
+			while (!opStack.empty() && opStack.top() != -3) {
+				expr.push_back({ opStack.top() <= 4 ? 3 : 2, 0.0, opStack.top() });
 				opStack.pop();
 			}
 			if (opStack.top() == -3) {
@@ -82,12 +92,23 @@ void initFunc(std::string infix) {
 }
 
 int getOp(std::string& infix, int n) {
+	if (infix[n] == '[') {
+		for (int i = n + 1; i < infix.size(); i++) {
+			if (infix[i] == ']') {
+				return i + 1;
+			}
+		}
+		return infix.size();
+	}
+
 	for (int i = n + 1; i < infix.size(); i++) {
 		if (infix[i] == '\\' || infix[i] == '-' || infix[i] == '+' || infix[i] == '*' || infix[i] == '/' || infix[i] == '^' || infix[i] == '(' || infix[i] == ')') {
-			return i;
+			if (i != n + 1) {
+				return i;
+			}
 		}
 	}
-	return -1;
+	return infix.size();
 }
 
 int getOpCode(std::string& token) {
@@ -273,16 +294,16 @@ std::complex<double> f(std::complex<double> z) {
 				temp.push(temp1 + temp2);
 				break;
 			case 1:
-				temp.push(temp1 - temp2);
+				temp.push(temp2 - temp1);
 				break;
 			case 2:
 				temp.push(temp1*temp2);
 				break;
 			case 3:
-				temp.push(temp1 / temp2);
+				temp.push(temp2 / temp1);
 				break;
 			case 4:
-				temp.push(std::pow(temp1, temp2));
+				temp.push(std::pow(temp2, temp1));
 				break;
 			default:
 				temp.push(evalFunc(it->op, temp1));
@@ -291,37 +312,4 @@ std::complex<double> f(std::complex<double> z) {
 		}
 	}
 	return temp.top();
-}
-
-std::complex<double> gamma(std::complex<double> z) {
-	if (z.real() < 0.5) {
-		return PI / (std::sin(PI*z) * gamma(1.0 - z));
-	}
-	else {
-		z -= 1;
-		std::complex<double> x = 0.99999999999980993;
-		for (int n = 0; n <= 8; n++) {
-			x += p[n] / (z + 1.0 + (double)n);
-		}
-		std::complex<double> t = z + 8.0 - 0.5;
-		return std::sqrt(2 * PI)*std::pow(t, z + 0.5)*std::exp(-t)*x;
-	}
-}
-
-std::complex<double> bessel_J(int alpha, std::complex<double> z) {
-	std::complex<double> w = 1.0 + std::cos(alpha*PI);
-	double n = 100; //gives error on the order of magnitude of around 1e-8 for |z|<20
-	double theta = 0;
-
-	for (int i = 1; i < n; i++) {
-		theta = i * PI / n;
-		if (i % 2 == 1) {
-			w += 4.0*std::cos(alpha*theta - z * std::sin(theta));
-		}
-		else {
-			w += 2.0*std::cos(alpha*theta - z * std::sin(theta));
-		}
-	}
-	w /= (3 * n);
-	return w;
 }
