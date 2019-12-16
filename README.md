@@ -30,9 +30,7 @@ The phase, or argument, of the function is given by the *hue* of the color in th
 * 5π/3: Purple
 
 While this is a useful tool, it can be quite hard to accurately distinguish hues, especially since humans don't interpret each hue equally.
-To help better analyze the phase, the `equiAngleLines` variable can be set to `true`. This will create white streaks in the image that 
-connect equal phase points of f(z), as can be seen below, with streaks for each phase which is an integer multiple of π/6, giving 
-precise information about the phase of points in the plot. 
+To help better analyze the phase, equal angle lines can be enabled. This will create white streaks in the image that connect equal phase points of f(z), as can be seen below, with streaks for each phase which is an integer multiple of π/6, giving precise information about the phase of points in the plot. 
 
 <a href="https://imgur.com/RvtG1YR"><img src="https://i.imgur.com/RvtG1YR.jpg" title="source: imgur.com" /></a>
 
@@ -41,7 +39,7 @@ precise information about the phase of points in the plot.
 A grid can also be enabled, where the "lines" of the "grid" mark curves where either Re(f(z)) or Im(f(z)) are constant. Two such lines 
 will coincide with the white streaks of constant phase - where the phase is 0 or π (constantly real), or π/2 or 3π/2 (constantly 
 imaginary). The function can also be seen as analytic or not by checking if the crossing points of the grid are all at right angles. This
-grid can be seen in the image below. The grid can be enabled by setting the `lines` variable can be set to `true`
+grid can be seen in the image below. 
 
 <a href="https://imgur.com/wQLBEKY"><img src="https://i.imgur.com/wQLBEKY.jpg" title="source: imgur.com" /></a>
 
@@ -51,22 +49,58 @@ Both the grid and the streaks can be enabled, to get all of the above informatio
 
 <a href="https://imgur.com/wqybGnU"><img src="https://i.imgur.com/wqybGnU.jpg" title="source: imgur.com" /></a>
 
-## Technical information
-The step size, the domain of the plotted function, and the settings to turn on can all be controlled using the variables at the
-start of `main()`. The domain is controlled through the variables `realMin`, `realMax`, `imagMin` and `imagMax`, with the end
-domain being [`realMin`, `realMax`]×[`imagMin`, `imagMax`]. The step size is controlled using the variable `step`. The grid and
-constant angle lines can be turned on and off as described above. The function plotted can also be modified by changing the 
-function `f` in code, and making it return whatever function you need. The final plot will be saved as a file named saved.png.
+## Technical Details
+
+### Program Parameters
+The step size, the domain of the plotted function, and equal angle lines, the grid and the function can all be controlled through command line arguments, with the format `-[identifier of argument] argument`. The following list outlines all of the available commands:
+* `-realMin [decimal number]` (alias: `-a`)
+* `-realMax [decimal number]` (alias: `-b`)
+* `-imagMin [decimal number]` (alias: `-c`)
+* `-imagMax [decimal number]` (alias: `-d`) 
+* `-step [decimal number]` (alias: `-s`)
+* `-grid [t/f]` (alias: `-g`)
+* `-angleLines [t/f]` (alias: `-l`)
+* `-func [function]` (alias: `-f`)
+
+The domain is controlled through the arguments `realMin`, `realMax`, `imagMin` and `imagMax`, with the end
+domain being [`realMin`, `realMax`]×[`imagMin`, `imagMax`]. The restrictions on `realMin`, `realMax`, `imagMin` and `imagMax` are that they must be *real decimal* quantities, and `realMax` and `imagMax` must be greater than `realMin` and `imagMin`, respectively.
+
+The step size is controlled using the argument `step`, which should be ideally much smaller than the difference between minimum and maximum quantities of both the real and imaginary domains.
+
+The constant angle lines can be turned on or off by using either `-l t` or `-l f`, respectively. Similarly, the grid can be turned on or off by using either `-g t` or `-g f`.
+
+Passing the function is a bit more complicated, and must be done with a very specific syntax in order for the function to be properly interpreted. The parts of the function syntax are:
+* numbers
+* operators
+* brackets
+* inbuilt functions
+* the variable
+
+The syntax for numbers can be in one of three ways. The syntax for a *real positive integer* is simply the integer itself, with no additional components, such as `2`. The syntax for a general real number is a backslash and then the real number, such as `\-7.32`. The syntax for a general complex number is a backslash, and the real and imaginary components in brackets after seperated by a comma. For example, the real number 1.54+2.55i would be written as `\(1.54,2.55)`. Make sure there are NO SPACES. There are also 3 additional constants available, which can be inputed directly: π can be written as `\pi`, e (Euler's number) can be written as `e`, and the imaginary unit i can be written as `i`.
+
+The five operators are +, -, \*, /, and ^, for addition, subtraction, division, multiplication and exponentiation, respectively. They can be inputed without any additional arguments. For example, π+3\*4 is inputed as `\pi+3/4`. Brackets are also input without any additional syntax, so (-1+e) squared is input as `(\-1+e)^2`. Multiplication must always be explicitly defined using \* (for example, `5(3+1)` will not be interpreted as 5 multiplied by 3+1, it must be `5*(3+1)`).
+
+Functions are input with a backslash, the name of the function, and followed by brackets surrounding the argument of the function. For example, sin(π/4) is `\sin(\pi/4)`. Currently, all of the inbuilt functions available are single input (no min, max or mod function for example). The list of available functions is: 
+* Miscellaneous Complex: `\Re`, `\Im`, `\abs`, `\arg`, `\conj`
+* Trigonometric Functions: `\cos`, `\sin`, `\tan`, `\sec`, `\csc`, `\cot`
+* Inverse Trigonometric Functions: `\acos`, `\asin`, `\atan`, `\asec`, `\acsc`, `\acot`
+* Hyperbolic Trigonometric Functions: `\cosh`, `\sinh`, `\tanh`, `\sech`, `\csch`, `\coth`
+* Inverse Hyperbolic Trigonometric Functions: `\acosh`, `\asinh`, `\atanh`, `\asech`, `\acsch`, `\acoth`
+* Logarithms: `\log` (base 10), `\ln` (natural logarithm)
+* Exponential: `\exp`
+
+Possible functions available in the future may be square root (can currently be implemented by `^\0.5`), the Gamma function, and Bessel functions.
+
+Lastly, a variable quantity can also be passed in, as `z`, which is what will be changed in the program to evaluate the function.
+
+Combining this, we can input the function graphed above as `((z+3+5*i)*(z-7*i)^2)*(1/z+i/((z-5-3*i)^3))`.
+
+### Other details
 
 The equiangle lines are made by increasing the saturation massively when the point is close in phase to a multiple of π/6, which
 is implemented by approximating a notch filter using some lines, which is why this creates streaks with a gradient fall off. The grid is made by first finding the mod of the real nad imaginary components of each pixel's function value, and then subtracting half the divisor, which roughly evenly splits both reals and imaginary numbers into half each. Then each location where the mod-subtracted-real and imaginary component are the same sign are made white, while the rest of the components are made black, making a checkerboard pattern. An edge detect filter is passed through, isolating only the edges and making the grid, and then grid is imposed onto the plot by darkening the respective elements of the plot. This gives solid equal width curves for the grid, instead of variable length gradient streaks, which would not be suited to visualizing a grid.
 
 The HSV to RGB conversion is done according to the algorithm given on [Wikipedia](https://en.wikipedia.org/wiki/HSL_and_HSV#HSV_to_RGB)
-
-## Next Steps 
-
-The plan is to eventually be able to supply all necessary arguments from the command line, but I would need to work on a command 
-line function interpreter first (or find one!).
 
 ## Examples
 Some example plots I have made in order to illustrate the kinds of outputs.
