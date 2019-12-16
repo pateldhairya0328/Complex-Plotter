@@ -76,7 +76,7 @@ Passing the function is a bit more complicated, and must be done with a very spe
 * inbuilt functions
 * the variable
 
-The syntax for numbers can be in one of three ways. The syntax for a *real positive integer* is simply the integer itself, with no additional components, such as `2`. The syntax for a general real number is a backslash and then the real number, such as `\-7.32`. The syntax for a general complex number is a backslash, and the real and imaginary components in brackets after seperated by a comma. For example, the real number 1.54+2.55i would be written as `\(1.54,2.55)`. Make sure there are NO SPACES. There are also 3 additional constants available, which can be inputed directly: π can be written as `\pi`, e (Euler's number) can be written as `e`, and the imaginary unit i can be written as `i`.
+The syntax for numbers can be in one of three ways. The syntax for a *real positive integer* is simply the integer itself, with no additional components, such as `2`. The syntax for a general real number is a backslash and then the real number, such as `\-7.32`. The syntax for a general complex number is writing the real and imaginary components in square brackets seperated by a comma. For example, the real number 1.54+2.55i would be written as `[1.54,2.55]`. Make sure there are NO SPACES. There are also three additional constants available, which can be inputed directly: π can be written as `\pi`, e (Euler's number) can be written as `e`, and the imaginary unit i can be written as `i`.
 
 The five operators are +, -, \*, /, and ^, for addition, subtraction, division, multiplication and exponentiation, respectively. They can be inputed without any additional arguments. For example, π+3\*4 is inputed as `\pi+3/4`. Brackets are also input without any additional syntax, so (-1+e) squared is input as `(\-1+e)^2`. Multiplication must always be explicitly defined using \* (for example, `5(3+1)` will not be interpreted as 5 multiplied by 3+1, it must be `5*(3+1)`).
 
@@ -93,9 +93,11 @@ Possible functions available in the future may be square root (can currently be 
 
 Lastly, a variable quantity can also be passed in, as `z`, which is what will be changed in the program to evaluate the function.
 
-Combining this, we can input the function graphed above as `((z+3+5*i)*(z-7*i)^2)*(1/z+i/((z-5-3*i)^3))`.
+Combining this, we can input the function graphed above as `((z+[3,5])*(z-7*i)^2)*(1/z+i/(z-[5,3])^3)`.
 
-### Other details
+**Important Note: Make sure there are NO SPACES anywhere in the function expression. The interpreter will assume a space to be the end of the function.**
+
+### Other Details
 
 The equiangle lines are made by increasing the saturation massively when the point is close in phase to a multiple of π/6, which
 is implemented by approximating a notch filter using some lines, which is why this creates streaks with a gradient fall off. The grid is made by first finding the mod of the real nad imaginary components of each pixel's function value, and then subtracting half the divisor, which roughly evenly splits both reals and imaginary numbers into half each. Then each location where the mod-subtracted-real and imaginary component are the same sign are made white, while the rest of the components are made black, making a checkerboard pattern. An edge detect filter is passed through, isolating only the edges and making the grid, and then grid is imposed onto the plot by darkening the respective elements of the plot. This gives solid equal width curves for the grid, instead of variable length gradient streaks, which would not be suited to visualizing a grid.
