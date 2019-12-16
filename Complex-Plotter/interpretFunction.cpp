@@ -2,6 +2,7 @@
 #include "interpretFunction.h"
 
 std::vector<Token> expr;
+std::vector<std::complex<double>> temp;
 
 void initFunc(std::string infix) {
 	std::vector<std::string> infixVec;
@@ -89,6 +90,8 @@ void initFunc(std::string infix) {
 		expr.push_back({ opStack.top() <= 4 ? 3 : 2, 0.0, opStack.top() });
 		opStack.pop();
 	}
+
+	temp.insert(temp.begin(), expr.size(), 0);
 }
 
 int getOp(std::string& infix, int n) {
@@ -269,47 +272,45 @@ std::complex<double> evalFunc(int opCode, std::complex<double> z) {
 }
 
 std::complex<double> f(std::complex<double> z) {
-	std::stack<std::complex<double>> temp;
+	int stackCounter = 0;
 	std::complex<double> temp1, temp2;
 
 	for (std::vector<Token>::iterator it = expr.begin(); it != expr.end(); it++) {
 		if (it->type == 0) {
-			temp.push(it->num);
+			temp[stackCounter++] = it->num;
 		}
 		else if (it->type == 1) {
-			temp.push(z);
+			temp[stackCounter++] = z;
 		}
 		else if (it->type == 2) {
-			temp1 = temp.top();
-			temp.pop();
-			temp.push(evalFunc(it->op, temp1));
+			temp1 = temp[--stackCounter];
+			temp[stackCounter++] = evalFunc(it->op, temp1);
 		}
 		else if (it->type == 3) {
-			temp1 = temp.top();
-			temp.pop();
-			temp2 = temp.top();
-			temp.pop();
+			temp1 = temp[--stackCounter];
+			temp2 = temp[--stackCounter];
+
 			switch (it->op) {
 			case 0:
-				temp.push(temp1 + temp2);
+				temp[stackCounter++] = temp2 + temp1;
 				break;
 			case 1:
-				temp.push(temp2 - temp1);
+				temp[stackCounter++] = temp2 - temp1;
 				break;
 			case 2:
-				temp.push(temp1*temp2);
+				temp[stackCounter++] = temp2 * temp1;
 				break;
 			case 3:
-				temp.push(temp2 / temp1);
+				temp[stackCounter++] = temp2 / temp1;
 				break;
 			case 4:
-				temp.push(std::pow(temp2, temp1));
+				temp[stackCounter++] = std::pow(temp2, temp1);
 				break;
 			default:
-				temp.push(evalFunc(it->op, temp1));
+				temp[stackCounter++] = 0;
 				break;
 			}
 		}
 	}
-	return temp.top();
+	return temp[--stackCounter];
 }
