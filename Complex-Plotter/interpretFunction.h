@@ -12,6 +12,12 @@ constexpr std::complex<double> I = std::complex<double>(0, 1.0);
 
 constexpr double p[8] = { 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7 };
 
+//struct used for creating postfix expression, since the expression
+//needs to handle operators, functions and numbers. I could just use
+//a string to represent all of them, and convert to correct format 
+//when necessary, but that would be a significant tax on program speed
+//this approach uses more memory but will be faster when evaluating 
+//the function expression
 struct Token {
 	int type = 0;
 	std::complex<double> num;//type = 0: constant, type1: variable (z)
@@ -74,5 +80,5 @@ void initFunc(std::string infix);
 int getOpCode(std::string& token);
 int getOp(std::string& infix, int n);
 std::complex<double> f(std::complex<double> z);
-std::complex<double> gamma(std::complex<double> z);
-std::complex<double> bessel_J(int alpha, std::complex<double> z);
+//std::complex<double> gamma(std::complex<double> z);
+//std::complex<double> bessel_J(int alpha, std::complex<double> z);

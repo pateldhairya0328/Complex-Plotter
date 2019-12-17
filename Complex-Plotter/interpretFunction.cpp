@@ -31,7 +31,7 @@ void initFunc(std::string infix) {
 		}
 	}
 
-	//Put expression into reverse polish notation
+	//Put expression into reverse polish notation using the shunting-yard algorithm with functions
 	for (std::vector<std::string>::iterator it = infixVec.begin(); it != infixVec.end(); it++) {
 		std::string token = *it;
 		std::complex<double> value;
@@ -91,9 +91,11 @@ void initFunc(std::string infix) {
 		opStack.pop();
 	}
 
+	//initializes vector to necessary size that will be used as a stack for function evaluations
 	temp.insert(temp.begin(), expr.size(), 0);
 }
 
+//gets operation/function/number indices that can be used to isolate token 
 int getOp(std::string& infix, int n) {
 	if (infix[n] == '[') {
 		for (int i = n + 1; i < infix.size(); i++) {
@@ -114,6 +116,7 @@ int getOp(std::string& infix, int n) {
 	return infix.size();
 }
 
+//Gets operation code
 int getOpCode(std::string& token) {
 	if (token == "(")
 		return -3;
@@ -199,6 +202,7 @@ int getOpCode(std::string& token) {
 		return -1;
 }
 
+//evaluates a function based on an operation code that identifies function and argument
 std::complex<double> evalFunc(int opCode, std::complex<double> z) {
 	switch (opCode) {
 	case 5:
@@ -271,6 +275,8 @@ std::complex<double> evalFunc(int opCode, std::complex<double> z) {
 
 }
 
+//evaluates the overall expression using a stack
+//this is the bottleneck on the program speed
 std::complex<double> f(std::complex<double> z) {
 	int stackCounter = 0;
 	std::complex<double> temp1, temp2;
