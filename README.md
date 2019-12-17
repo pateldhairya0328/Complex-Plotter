@@ -96,7 +96,7 @@ Possible functions available in the future may be square root (can currently be 
 
 Lastly, a variable quantity can also be passed in, as `z`, which is what will be changed in the program to evaluate the function. It is important that the variable is always input as `z`, and nothing else (such as `x` or `s`). 
 
-Combining this, we can input the function graphed above as `((z+[3,5])*(z-7*i)^2)*(1/z+i/(z-[5,3])^3)`. In order to obtain the plot above, the full command line argument would be `Complex-Plotter.exe -a -10 -b 10 -c -10 -d 10 -s 0.002604166666667 -g t -l t -f ((z+[3,5])*(z-7*i)^2)*(1/z+i/(z-[5,3])^3)`. 
+Combining this, we can input the function graphed above as `((z+[3,5])*(z-7*i)^2)*(1/z+i/(z-[5,3])^3)`. In order to obtain the plot above, the full command line argument would be `Complex-Plotter.exe -a -10 -b 10 -c -10 -d 10 -s 0.002604166666667 -g b -l t -f ((z+[3,5])*(z-7*i)^2)*(1/z+i/(z-[5,3])^3)`. 
 
 ### Other Details
 
