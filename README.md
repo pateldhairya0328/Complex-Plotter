@@ -58,16 +58,17 @@ The step size, the domain of the plotted function, and equal angle lines, the gr
 * `-imagMin [decimal number]` (alias: `-c`)
 * `-imagMax [decimal number]` (alias: `-d`) 
 * `-step [decimal number]` (alias: `-s`)
-* `-grid [t/f]` (alias: `-g`)
+* `-grid [f/s/m/b]` (alias: `-g`)
 * `-angleLines [t/f]` (alias: `-l`)
 * `-func [function]` (alias: `-f`)
+* `-help` (alias: `-h`)
 
 The domain is controlled through the arguments `realMin`, `realMax`, `imagMin` and `imagMax`, with the end
 domain being [`realMin`, `realMax`]×[`imagMin`, `imagMax`]. The restrictions on `realMin`, `realMax`, `imagMin` and `imagMax` are that they must be *real decimal* quantities, and `realMax` and `imagMax` must be greater than `realMin` and `imagMin`, respectively.
 
 The step size is controlled using the argument `step`, which should be ideally much smaller than the difference between minimum and maximum quantities of both the real and imaginary domains.
 
-The constant angle lines can be turned on or off by using either `-l t` or `-l f`, respectively. Similarly, the grid can be turned on or off by using either `-g t` or `-g f`.
+The constant angle lines can be turned on or off by using either `-l t` or `-l f`, respectively. The grid can be disabled using `-l f`, and `s`, `m`, `b` instead of `f` enables a small, medium or big grid respectively.
 
 Passing the function is a bit more complicated, and must be done with a very specific syntax in order for the function to be properly interpreted. The parts of the function syntax are:
 * numbers
@@ -76,9 +77,9 @@ Passing the function is a bit more complicated, and must be done with a very spe
 * inbuilt functions
 * the variable
 
-The syntax for numbers can be in one of three ways. The syntax for a *real positive integer* is simply the integer itself, with no additional components, such as `2`. The syntax for a general real number is a backslash and then the real number, such as `\-7.32`. The syntax for a general complex number is writing the real and imaginary components in square brackets seperated by a comma. For example, the real number 1.54+2.55i would be written as `[1.54,2.55]`. Make sure there are NO SPACES. There are also three additional constants available, which can be inputed directly: π can be written as `\pi`, e (Euler's number) can be written as `e`, and the imaginary unit i can be written as `i`.
+The syntax for numbers can be in one of three ways. The syntax for a *real positive integer* is simply the integer itself, with no additional components, such as `2`. The syntax for a general real number is a backslash and then the real number, such as `\-7.32`. The syntax for a general complex number is writing the real and imaginary components in square brackets seperated by a comma. For example, the real number 1.54+2.55i would be written as `[1.54,2.55]`. Make sure there are NO SPACES. There are also three additional constants available, which can be input directly: π can be written as `\pi`, e (Euler's number) can be written as `e`, and the imaginary unit i can be written as `i`.
 
-The five operators are +, -, \*, /, and ^, for addition, subtraction, division, multiplication and exponentiation, respectively. They can be inputed without any additional arguments. For example, π+3\*4 is inputed as `\pi+3/4`. Brackets are also input without any additional syntax, so (-1+e) squared is input as `(\-1+e)^2`. Multiplication must always be explicitly defined using \* (for example, `5(3+1)` will not be interpreted as 5 multiplied by 3+1, it must be `5*(3+1)`).
+The five operators are +, -, \*, /, and ^, for addition, subtraction, division, multiplication and exponentiation, respectively. They can be inputed without any additional arguments. For example, π+3\*4 is inputed as `\pi+3/4`. Brackets are also input without any additional syntax, so (-1+e) squared is input as `(\-1+e)^2`. Multiplication must always be explicitly defined using \* (for example, `5(3+1)` will not be interpreted as 5 multiplied by 3+1, it must be `5*(3+1)`). Brackets can also be input directly, as `(` or `)`. Other kinds of brackets will not work (for example do NOT use `[` or `]` as brackets). In Windows, `^` is an escape character, so `^^` must be input instead of `^`.
 
 Functions are input with a backslash, the name of the function, and followed by brackets surrounding the argument of the function. For example, sin(π/4) is `\sin(\pi/4)`. Currently, all of the inbuilt functions available are single input (no min, max or mod function for example). The list of available functions is: 
 * Miscellaneous Complex: `\Re`, `\Im`, `\abs`, `\arg`, `\conj`
@@ -91,11 +92,11 @@ Functions are input with a backslash, the name of the function, and followed by 
 
 Possible functions available in the future may be square root (can currently be implemented by `^\0.5`), the Gamma function, and Bessel functions.
 
-Lastly, a variable quantity can also be passed in, as `z`, which is what will be changed in the program to evaluate the function.
-
-Combining this, we can input the function graphed above as `((z+[3,5])*(z-7*i)^2)*(1/z+i/(z-[5,3])^3)`.
-
 **Important Note: Make sure there are NO SPACES anywhere in the function expression. The interpreter will assume a space to be the end of the function.**
+
+Lastly, a variable quantity can also be passed in, as `z`, which is what will be changed in the program to evaluate the function. It is important that the variable is always input as `z`, and nothing else (such as `x` or `s`). 
+
+Combining this, we can input the function graphed above as `((z+[3,5])*(z-7*i)^2)*(1/z+i/(z-[5,3])^3)`. In order to obtain the plot above, the full command line argument would be `Complex-Plotter.exe -a -10 -b 10 -c -10 -d 10 -s 0.002604166666667 -g b -l t -f ((z+[3,5])*(z-7*i)^2)*(1/z+i/(z-[5,3])^3)`. 
 
 ### Other Details
 
@@ -164,7 +165,7 @@ This plot is remarkably similar to the previous, since taking the inverse only c
 * ![Equation](https://latex.codecogs.com/gif.latex?\arcsin\left(z\right))
 over [-5, 5]×[-5, 5]
 
-The location of where the branch cuts need to be made can be seen, along the real axis for abs(Re(z)) > 1,  here where there is an abrupt change in hue.
+The location of where the branch cuts need to be made can be seen here, along the real axis for abs(Re(z)) > 1,  where there is an abrupt change in hue.
 
 <a href="https://imgur.com/V3XaqDo"><img src="https://i.imgur.com/V3XaqDo.jpg" title="source: imgur.com" /></a>
 
@@ -183,13 +184,13 @@ Another example that illustrates where a branch cut would need to be made, along
 * ![Equation](https://latex.codecogs.com/gif.latex?\left(1&plus;z\right)\left(1&plus;0.445z&plus;z^{2}\right)\left(1&plus;1.247z&plus;z^{2}\right)\left(1&plus;1.8019z&plus;z^{2}\right))
 over [-1.5, 1.5]×[-1.5, 1.5]
 
-The plot for the 7th degree Butterworth polynomial of a low pass Butterworth filter, with the locaation of the 7 zeros being seen around the high frequencies. 
+The plot for the 7th degree Butterworth polynomial of a low pass Butterworth filter, with the location of the 7 zeros being seen around the high frequencies (left half of the unit circle)
 
 <a href="https://imgur.com/7VFcTRL"><img src="https://i.imgur.com/7VFcTRL.jpg" title="source: imgur.com" /></a>
 
 * ![Equation](https://latex.codecogs.com/gif.latex?\frac{\sin\left(z^{3}-1\right)}{z})
 over [-2, 2]×[-2, 2]
 
-Just a fun function plot. The rotational symmetry with period 2π/3 can be seen, and the reason is the exponent of 3 on z for the argument to sine. The three zeros of the argument of sine (which also produce 0 for sine) can also be seen. Furthermore, it can be seen that the function behaves roughly like 1/z near the center, due to the small angle approximation and z^3 being more insignificant
+Just a fun function plot. The rotational symmetry with period 2π/3 can be seen, and the reason is the exponent of 3 on z for the argument to sine. The three zeros of the argument of sine (which also produce 0 for sine) can also be seen. Furthermore, it can be seen that the function behaves roughly like -1/z near the center, due to the small angle approximation and z^3 being more insignificant
 
 <a href="https://imgur.com/IF4PDJV"><img src="https://i.imgur.com/IF4PDJV.jpg" title="source: imgur.com" /></a>
