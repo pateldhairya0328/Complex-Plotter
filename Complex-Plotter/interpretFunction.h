@@ -28,7 +28,7 @@ struct Token {
 	-3 - (
 	-2 - )
 
-	-1 - not an operation or function
+	-1 - not an operator or function or ()
 
 	0  - (+)
 	1  - (-)
@@ -73,6 +73,9 @@ struct Token {
 	34 - exp(z)
 	35 - ln(z)
 	36 - log(z) (base 10)
+
+	37 - step(|z|) (step greater than equal to 0)
+	38 - stepgt(|z|) (step greater than 0)
 	*/
 };
 
@@ -80,5 +83,6 @@ void initFunc(std::string infix);
 int getOpCode(std::string& token);
 int getOp(std::string& infix, int n);
 std::complex<double> f(std::complex<double> z);
+std::complex<double> evalFunc(int opCode, std::complex<double> z);
 //std::complex<double> gamma(std::complex<double> z);
 //std::complex<double> bessel_J(int alpha, std::complex<double> z);

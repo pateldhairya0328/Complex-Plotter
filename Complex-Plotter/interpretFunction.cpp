@@ -196,8 +196,10 @@ int getOpCode(std::string& token) {
 		return 35;
 	else if (token == "log")
 		return 36;
-	else if (token == "targ")
+	else if (token == "step")
 		return 37;
+	else if (token == "stepgt")
+		return 38;
 	else
 		return -1;
 }
@@ -269,10 +271,13 @@ std::complex<double> evalFunc(int opCode, std::complex<double> z) {
 		return std::log(z);
 	case 36:
 		return std::log10(z);
+	case 37:
+		return z.real() >= 0 ? 1 : 0;
+	case 38:
+		return z.real() > 0 ? 1 : 0;
 	default:
 		return 0.0;
 	}
-
 }
 
 //evaluates the overall expression using a stack
