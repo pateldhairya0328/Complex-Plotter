@@ -81,7 +81,7 @@ struct Token {
 
 void initFunc(std::string infix);
 int getOpCode(std::string& token);
-int getOp(std::string& infix, int n);
+int getOp(std::string& infix, int n); 
 std::complex<double> f(std::complex<double> z);
 std::complex<double> evalFunc(int opCode, std::complex<double> z);
 //std::complex<double> gamma(std::complex<double> z);
