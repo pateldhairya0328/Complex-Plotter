@@ -49,6 +49,14 @@ Both the grid and the streaks can be enabled, to get all of the above informatio
 
 <a href="https://imgur.com/wqybGnU"><img src="https://i.imgur.com/wqybGnU.jpg" title="source: imgur.com" /></a>
 
+## Domain Grid
+
+You can also overlay the grid of the domain onto the image, in order to more precisely locate information about the plot. This grid will have a step of only 2 significant figures (with the second significant figure being either 0 or 5), making it easy to calculate the numerical coordinates of any location. The grids will also begin at a numerical value rounded to 2 significant figures. For example, if the domain is [-10.032, 11.22]x[-10.032, 11.22], the grids will begin at -10 on both the real and imaginary axis, and the grid lines will be 2.0 apart (not 2.1, even though 2.1 is the correct rounding to 2 significant figures). An example of how the grid looks is shown below. The grid helps identify the exact locations of the zeros and poles (which can be seen from the function as well).
+
+<a href="https://imgur.com/XPydZRH"><img src="https://i.imgur.com/XPydZRH.jpg" title="source: imgur.com" /></a>
+
+Note: Try not to enable this grid and the grid of constant real and imaginary values simultaneously, as the plot will become very busy. But in the case both are enabled, the two grids have very different line styles. This grid is a solid, thinner, darker gray, whereas the previous grid will be a lighter, more translucsent gray.
+
 ## Technical Details
 
 ### Program Parameters
@@ -60,6 +68,8 @@ The step size, the domain of the plotted function, and equal angle lines, the gr
 * `-step [decimal number]` (alias: `-s`)
 * `-grid [f/s/m/b]` (alias: `-g`)
 * `-angleLines [t/f]` (alias: `-l`)
+* `-axes [t/f]` (alias: `-x`)
+* `-name [string]` (alias: `-n`)
 * `-func [function]` (alias: `-f`)
 * `-help` (alias: `-h`)
 
@@ -68,7 +78,7 @@ domain being [`realMin`, `realMax`]×[`imagMin`, `imagMax`]. The restrictions on
 
 The step size is controlled using the argument `step`, which should be ideally much smaller than the difference between minimum and maximum quantities of both the real and imaginary domains.
 
-The constant angle lines can be turned on or off by using either `-l t` or `-l f`, respectively. The grid can be disabled using `-l f`, and `s`, `m`, `b` instead of `f` enables a small, medium or big grid respectively.
+The constant angle lines can be turned on or off by using either `-l t` or `-l f`, respectively. The grid can be disabled using `-l f`, and `s`, `m`, `b` instead of `f` enables a small, medium or big grid respectively. The grid parallel to the axes can be enabled or disabled by `-x t` or `-x f`. The name of the saved file can be passed using `-n [name]`, where name is any valid string without spaces. By default, the name will be saved.png. Do NOT include the file extension (.png) in the name; .png will always be added by default. The help flag simply lists all the commands, and includes a link to this README for more information.
 
 Passing the function is a bit more complicated, and must be done with a very specific syntax in order for the function to be properly interpreted. The parts of the function syntax are:
 * numbers
