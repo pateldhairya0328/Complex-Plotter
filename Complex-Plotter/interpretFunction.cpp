@@ -3,6 +3,11 @@
 
 std::vector<Token> expr;
 std::vector<std::complex<double>> temp;
+double step = 0;
+
+void setStep(double argstep) {
+	step = argstep;
+}
 
 void initFunc(std::string infix) {
 	std::vector<std::string> infixVec;
@@ -198,7 +203,7 @@ int getOpCode(std::string& token) {
 		return 36;
 	else if (token == "step")
 		return 37;
-	else if (token == "stepgt")
+	else if (token == "delta")
 		return 38;
 	else
 		return -1;
@@ -274,7 +279,7 @@ std::complex<double> evalFunc(int opCode, std::complex<double> z) {
 	case 37:
 		return z.real() >= 0 ? 1 : 0;
 	case 38:
-		return z.real() > 0 ? 1 : 0;
+		return std::abs(z.real()) <= 5*step;
 	default:
 		return 0.0;
 	}

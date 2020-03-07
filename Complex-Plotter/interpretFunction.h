@@ -79,6 +79,7 @@ struct Token {
 	*/
 };
 
+void setStep(double argstep);
 void initFunc(std::string infix);
 int getOpCode(std::string& token);
 int getOp(std::string& infix, int n); 
