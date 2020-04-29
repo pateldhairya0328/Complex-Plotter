@@ -13,22 +13,43 @@ void initFunc(std::string infix) {
 	std::vector<std::string> infixVec;
 	std::stack<int> opStack;
 
+	std::replace(infix.begin(), infix.end(), '[', '(');
+	std::replace(infix.begin(), infix.end(), ']', ')');
+
 	//Isolate each operator, function and number as an individual token string
 	for (int i = 0; i < infix.size(); i++) {
 		if (infix[i] == '\\') {
 			int j = getOp(infix, i);
-			std::string temp = infix.substr(i + 1, j - i - 1);
-			std::replace(temp.begin(), temp.end(), '[', '(');
-			std::replace(temp.begin(), temp.end(), ']', ')');
-			infixVec.push_back(temp);
+			std::string tempStr = infix.substr(i + 1, j - i - 1);
+			infixVec.push_back(tempStr);
 			i = j - 1;
 		}
-		else if (infix[i] == '[') {
-			int j = getOp(infix, i);
-			std::string temp = infix.substr(i, j - i);
-			std::replace(temp.begin(), temp.end(), '[', '(');
-			std::replace(temp.begin(), temp.end(), ']', ')');
-			infixVec.push_back(temp);
+		else if (i > 0 && infix[i] == '-' && infix[i-1] == '(') {
+			infixVec.push_back("0");
+			infixVec.push_back(infix.substr(i, 1));
+		}
+		else if (i == 0 && infix[i] == '-') {
+			infixVec.push_back("0");
+			infixVec.push_back(infix.substr(i, 1));
+		}
+		else if (infix.substr(i, 2) == "pi") {
+			infixVec.push_back("pi");
+			i++;
+		}
+		else if (std::isdigit(infix[i]) || infix[i] == '.') {
+			int j = i;
+			while (j < infix.size() & (std::isdigit(infix[j]) || infix[j] == '.')) {
+				j++;
+			}
+			std::string tempStr = infix.substr(i, j - 1);
+
+			if (j < infix.size() && infix[j] == 'i') {
+				infixVec.push_back("(0," + tempStr + ")");
+				j++;
+			}
+			else {
+				infixVec.push_back(tempStr);
+			}
 			i = j - 1;
 		}
 		else {
@@ -102,15 +123,6 @@ void initFunc(std::string infix) {
 
 //gets operation/function/number indices that can be used to isolate token 
 int getOp(std::string& infix, int n) {
-	if (infix[n] == '[') {
-		for (int i = n + 1; i < infix.size(); i++) {
-			if (infix[i] == ']') {
-				return i + 1;
-			}
-		}
-		return infix.size();
-	}
-
 	for (int i = n + 1; i < infix.size(); i++) {
 		if (infix[i] == '\\' || infix[i] == '-' || infix[i] == '+' || infix[i] == '*' || infix[i] == '/' || infix[i] == '^' || infix[i] == '(' || infix[i] == ')') {
 			if (i != n + 1) {
@@ -137,9 +149,9 @@ int getOpCode(std::string& token) {
 		return 3;
 	else if (token == "^")
 		return 4;
-	else if (token == "Re")
+	else if (token == "Re" || token == "re")
 		return 5;
-	else if (token == "Im")
+	else if (token == "Im" || token == "im")
 		return 6;
 	else if (token == "abs")
 		return 7;
@@ -203,8 +215,12 @@ int getOpCode(std::string& token) {
 		return 36;
 	else if (token == "step")
 		return 37;
-	else if (token == "delta")
+	else if (token == "delta" || token == "Delta")
 		return 38;
+	else if (token == "gamma" || token == "Gamma")
+		return 39;
+	else if (token == "zeta")
+		return 40;
 	else
 		return -1;
 }
@@ -280,6 +296,10 @@ std::complex<double> evalFunc(int opCode, std::complex<double> z) {
 		return z.real() >= 0 ? 1 : 0;
 	case 38:
 		return std::abs(z.real()) <= 5*step;
+	case 39:
+		return gamma(z);
+	case 40:
+		return zeta(z);
 	default:
 		return 0.0;
 	}
@@ -329,4 +349,129 @@ std::complex<double> f(std::complex<double> z) {
 		}
 	}
 	return temp[--stackCounter];
+}
+
+//uses Lanczos approximation
+std::complex<double> gamma(std::complex<double> z) {
+	std::complex<double> y, x, t;
+	if (z.real() < 0.5) {
+		y = PI / (std::sin(PI * z) * gamma(1.0 - z)); //reflection formula
+	}
+	else {
+		z -= 1.0;
+		x = p[0];
+		for (int i = 1; i < pSize; i++) {
+			x += p[i] / (z + (double)(i - 1) + 1.0);
+		}
+		t = z + (double)pSize - 0.5 - 1.0;
+		y = std::sqrt(2 * PI) * std::pow(t, z + 0.5) * std::exp(-t) * x;
+	}
+
+	return y;
+}
+
+/*
+//using formula 21 on https://mathworld.wolfram.com/RiemannZetaFunction.html
+std::complex<double> zeta(std::complex<double> z) {
+	if (z.real() < 0.5) {
+		return 2.0 * std::pow(2.0 * PI, z - 1.0) * std::sin(0.5 * PI * z) * gamma(1.0 - z) * zeta(1.0 - z);
+	}
+	else {
+		std::complex<double> tot = 0, partialTot1 = 0.0, partialTot2 = 0.0;
+		double k1, n = 20;
+		double negOneFactor = (int)n % 2 == 0 ? -1 : 1;
+		double negOneFactor2 = 1;
+		double ek = 1;
+		int binCoeff = 1;
+
+		for (double k = n; k > 0; k--) {
+			k1 = k + n;
+			partialTot1 += negOneFactor * std::pow(k, -z);
+			partialTot2 += negOneFactor2 * ek * std::pow(k1, -z);
+			negOneFactor *= -1;
+			negOneFactor2 *= -2;
+			binCoeff = binCoeff * k / (n - k + 1);
+			ek += binCoeff;
+		}
+
+		return (partialTot1 + std::pow(2, -n) * partialTot2) / (1.0 - std::pow(2.0, 1.0 - z));
+	}
+}
+*/
+
+//using formula 21 on https://mathworld.wolfram.com/RiemannZetaFunction.html
+std::complex<double> zeta(std::complex<double> z) {
+	if (z.real() < 0) {
+		return 2.0 * std::pow(2.0 * PI, z - 1.0) * std::sin(0.5 * PI * z) * gamma(1.0 - z) * zeta(1.0 - z);
+	} 
+	else if (z.real() > 0.25) {
+		std::complex<double> tot = 0, partialTot = 1.0;
+		double div = -1, error = 0.00001, N = std::pow(error, -1 / z.real());
+		if (N <= 0.5 * std::max(460.0, 4 * z.imag() * z.imag() + 6 * z.imag())) {
+			for (double n = 1; n < 20; n++) {
+				div *= -1;
+				partialTot = div * std::pow(n, -z);
+				tot += partialTot;
+			}
+
+			return tot / (1.0 - std::pow(2.0, 1.0 - z));
+		}
+		else {
+			int binCoeff = 1, n = 0;
+			std::complex<double> tot = 0, partialTot = 1.0;
+			double div = 0.5;
+
+			while (n <= std::max(20.0, 2 * z.imag())) {
+				partialTot = 1.0;
+				binCoeff = 1;
+				for (int k = 1; k <= n; k++) {
+					binCoeff = binCoeff * (k - n - 1) / k;
+					partialTot += ((double)binCoeff) * std::pow(k + 1.0, -z);
+				}
+				partialTot *= div;
+				tot += partialTot;
+				div *= 0.5;
+				n++;
+			}
+
+			return tot / (1.0 - std::pow(2.0, 1.0 - z));
+		}
+	}
+	else {
+		std::complex<double> a = 2.0 * std::pow(2.0 * PI, z - 1.0) * std::sin(0.5 * PI * z) * gamma(1.0 - z) * zeta(1.0 - z);
+		std::complex<double> b = a;
+		std::complex<double> tot = 0, partialTot = 1.0;
+		double div = -1, error = 0.00001, N = std::pow(error, -1 / z.real());
+		if (N <= 0.5 * std::max(460.0, 4 * z.imag() * z.imag() + 6 * z.imag())) {
+			for (double n = 1; n < 20; n++) {
+				div *= -1;
+				partialTot = div * std::pow(n, -z);
+				tot += partialTot;
+			}
+
+			b = tot / (1.0 - std::pow(2.0, 1.0 - z));
+		}
+		else {
+			int binCoeff = 1, n = 0;
+			std::complex<double> tot = 0, partialTot = 1.0;
+			double div = 0.5;
+
+			while (n <= std::max(20.0, 2 * z.imag())) {
+				partialTot = 1.0;
+				binCoeff = 1;
+				for (int k = 1; k <= n; k++) {
+					binCoeff = binCoeff * (k - n - 1) / k;
+					partialTot += ((double)binCoeff) * std::pow(k + 1.0, -z);
+				}
+				partialTot *= div;
+				tot += partialTot;
+				div *= 0.5;
+				n++;
+			}
+
+			b = tot / (1.0 - std::pow(2.0, 1.0 - z));
+		}
+
+		return 4.0 * (z.real() * a + (0.25 - z.real()) * b);
+	}
 }
