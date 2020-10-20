@@ -66,8 +66,11 @@ The step size, the domain of the plotted function, and equal angle lines, the gr
 * `-imagMin [decimal number]` (alias: `-c`)
 * `-imagMax [decimal number]` (alias: `-d`) 
 * `-step [decimal number]` (alias: `-s`)
-* `-grid [f/s/m/b]` (alias: `-g`)
+* `-xstep [decimal number]` (alias: `-xs`)
+* `-ystep [decimal number]` (alias: `-ys`)
+* `-grid [f/0-10]` (alias: `-g`)
 * `-angleLines [t/f]` (alias: `-l`)
+* `-cScheme [s/h]` (alias `-c`)
 * `-axes [t/f]` (alias: `-x`)
 * `-name [string]` (alias: `-n`)
 * `-func [function]` (alias: `-f`)
@@ -76,9 +79,9 @@ The step size, the domain of the plotted function, and equal angle lines, the gr
 The domain is controlled through the arguments `realMin`, `realMax`, `imagMin` and `imagMax`, with the end
 domain being [`realMin`, `realMax`]×[`imagMin`, `imagMax`]. The restrictions on `realMin`, `realMax`, `imagMin` and `imagMax` are that they must be *real decimal* quantities, and `realMax` and `imagMax` must be greater than `realMin` and `imagMin`, respectively.
 
-The step size is controlled using the argument `step`, which should be ideally much smaller than the difference between minimum and maximum quantities of both the real and imaginary domains.
+The step size is controlled using the argument `step`, which should be ideally much smaller than the difference between minimum and maximum quantities of both the real and imaginary domains. You can also instead use the arguments `xstep` and `ystep` for different step sizes in the two axes.
 
-The constant angle lines can be turned on or off by using either `-l t` or `-l f`, respectively. The grid can be disabled using `-l f`, and `s`, `m`, `b` instead of `f` enables a small, medium or big grid respectively. The grid parallel to the axes can be enabled or disabled by `-x t` or `-x f`. The name of the saved file can be passed using `-n [name]`, where name is any valid string without spaces. By default, the name will be saved.png. Do NOT include the file extension (.png) in the name; .png will always be added by default. The help flag simply lists all the commands, and includes a link to this README for more information.
+The constant angle lines can be turned on or off by using either `-l t` or `-l f`, respectively. The grid can be disabled using `-l f`, and the numbers `0` to `10` instead of `f` enables a grid, with a larger number indicating a wider spaced grid. The grid parallel to the axes can be enabled or disabled by `-x t` or `-x f`. The colorscheme can be made to be either HSV or a smoother color scheme, using `-cScheme` with either `h` or `s, for the two options. The name of the saved file can be passed using `-n [name]`, where name is any valid string without spaces. By default, the name will be saved.png. Do NOT include the file extension (.png) in the name; .png will always be added by default. The help flag simply lists all the commands, and includes a link to this README for more information.
 
 Passing the function is a bit more complicated, and must be done with a very specific syntax in order for the function to be properly interpreted. The parts of the function syntax are:
 * numbers
@@ -87,9 +90,9 @@ Passing the function is a bit more complicated, and must be done with a very spe
 * inbuilt functions
 * the variable
 
-The syntax for numbers can be in one of three ways. The syntax for a *real positive integer* is simply the integer itself, with no additional components, such as `2`. The syntax for a general real number is a backslash and then the real number, such as `\-7.32`. The syntax for a general complex number is writing the real and imaginary components in square brackets seperated by a comma. For example, the real number 1.54+2.55i would be written as `[1.54,2.55]`. Make sure there are NO SPACES. There are also three additional constants available, which can be input directly: π can be written as `\pi`, e (Euler's number) can be written as `e`, and the imaginary unit i can be written as `i`.
+The syntax for numbers is simple: you can just directly write the numbers. For real numbers, -2 is simply `-2`, and 4.2347 is simply `4.2347`. There are three special numbers available: π, e and i. π can be entered as `pi`, e can be entered as `e` and i as `i`. For a complex number, you can simply write it has `a+bi`, where `a` and `b` are simply any real numbers. For example, you can enter the complex number 4.23-1.98i as `4.23-1.98i`.
 
-The five operators are +, -, \*, /, and ^, for addition, subtraction, division, multiplication and exponentiation, respectively. They can be inputed without any additional arguments. For example, π+3\*4 is inputed as `\pi+3/4`. Brackets are also input without any additional syntax, so (-1+e) squared is input as `(\-1+e)^2`. Multiplication must always be explicitly defined using \* (for example, `5(3+1)` will not be interpreted as 5 multiplied by 3+1, it must be `5*(3+1)`). Brackets can also be input directly, as `(` or `)`. Other kinds of brackets will not work (for example do NOT use `[` or `]` as brackets). In Windows, `^` is an escape character, so `^^` must be input instead of `^`.
+The five operators are +, -, \*, /, and ^, for addition, subtraction, division, multiplication and exponentiation, respectively. They can be inputed without any additional arguments. For example, π+3\*4 is inputed as `pi+3*4`. Brackets are also input without any additional syntax, so (-1+e) squared is input as `(-1+e)^2`. Multiplication must always be explicitly defined using \* (for example, `5(3+1)` will not be interpreted as 5 multiplied by 3+1, it must be `5*(3+1)`). Brackets can also be input directly, as `(` or `)`. Other kinds of brackets will not work (for example do NOT use `[` or `]` as brackets). In Windows, `^` is an escape character, so `^^` must be input instead of `^`.
 
 Functions are input with a backslash, the name of the function, and followed by brackets surrounding the argument of the function. For example, sin(π/4) is `\sin(\pi/4)`. Currently, all of the inbuilt functions available are single input (no min, max or mod function for example). The list of available functions is: 
 * Miscellaneous Complex: `\Re`, `\Im`, `\abs`, `\arg`, `\conj`
@@ -99,14 +102,18 @@ Functions are input with a backslash, the name of the function, and followed by 
 * Inverse Hyperbolic Trigonometric Functions: `\acosh`, `\asinh`, `\atanh`, `\asech`, `\acsch`, `\acoth`
 * Logarithms: `\log` (base 10), `\ln` (natural logarithm)
 * Exponential: `\exp`
+* Gamma: `\gamma`
+* Step: `\step` (step greater than equal to 0)
+*	Delta: `\delta` (1 around |z|, 0 elsewhere)
 
-Possible functions available in the future may be square root (can currently be implemented by `^\0.5`), the Gamma function, and Bessel functions.
+Possible functions available in the future may be square root (can currently be implemented by `^\0.5`), the Zeta function, and Bessel functions.
+NOTE: the last two ONLY work on the real component of the argument.
 
 **Important Note: Make sure there are NO SPACES anywhere in the function expression. The interpreter will assume a space to be the end of the function.**
 
-Lastly, a variable quantity can also be passed in, as `z`, which is what will be changed in the program to evaluate the function. It is important that the variable is always input as `z`, and nothing else (such as `x` or `s`). 
+Lastly, a variable quantity can also be passed in, as `z`, which is what will be changed in the program to evaluate the function. It is important that the variable is always input as `z`, and nothing else (such as `x` or `s` or `w`). 
 
-Combining this, we can input the function graphed above as `((z+[3,5])*(z-7*i)^2)*(1/z+i/(z-[5,3])^3)`. In order to obtain the plot above, the full command line argument would be `Complex-Plotter.exe -a -10 -b 10 -c -10 -d 10 -s 0.002604166666667 -g b -l t -f ((z+[3,5])*(z-7*i)^2)*(1/z+i/(z-[5,3])^3)`. 
+Combining this, we can input the function graphed above as `((z+3+5i)*(z-7i)^2)*(1/z+i/(z-5-3i)^3)`. In order to obtain the plot above, the full command line argument would be `Complex-Plotter.exe -a -10 -b 10 -c -10 -d 10 -s 0.002604166666667 -g b -l t -f ((z+3+5i)*(z-7i)^2)*(1/z+i/(z-5-3i)^3)`. 
 
 ### Other Details
 
