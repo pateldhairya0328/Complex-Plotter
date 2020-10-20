@@ -370,35 +370,6 @@ std::complex<double> gamma(std::complex<double> z) {
 	return y;
 }
 
-/*
-//using formula 21 on https://mathworld.wolfram.com/RiemannZetaFunction.html
-std::complex<double> zeta(std::complex<double> z) {
-	if (z.real() < 0.5) {
-		return 2.0 * std::pow(2.0 * PI, z - 1.0) * std::sin(0.5 * PI * z) * gamma(1.0 - z) * zeta(1.0 - z);
-	}
-	else {
-		std::complex<double> tot = 0, partialTot1 = 0.0, partialTot2 = 0.0;
-		double k1, n = 20;
-		double negOneFactor = (int)n % 2 == 0 ? -1 : 1;
-		double negOneFactor2 = 1;
-		double ek = 1;
-		int binCoeff = 1;
-
-		for (double k = n; k > 0; k--) {
-			k1 = k + n;
-			partialTot1 += negOneFactor * std::pow(k, -z);
-			partialTot2 += negOneFactor2 * ek * std::pow(k1, -z);
-			negOneFactor *= -1;
-			negOneFactor2 *= -2;
-			binCoeff = binCoeff * k / (n - k + 1);
-			ek += binCoeff;
-		}
-
-		return (partialTot1 + std::pow(2, -n) * partialTot2) / (1.0 - std::pow(2.0, 1.0 - z));
-	}
-}
-*/
-
 //using formula 21 on https://mathworld.wolfram.com/RiemannZetaFunction.html
 std::complex<double> zeta(std::complex<double> z) {
 	if (z.real() < 0) {
@@ -473,5 +444,94 @@ std::complex<double> zeta(std::complex<double> z) {
 		}
 
 		return 4.0 * (z.real() * a + (0.25 - z.real()) * b);
+	}
+}
+
+
+//using formula 21 on https://mathworld.wolfram.com/RiemannZetaFunction.html
+std::complex<double> zeta1(std::complex<double> z) {
+	if (z.real() <= 0) {
+		return 2.0 * std::pow(2.0 * PI, z - 1.0) * std::sin(0.5 * PI * z) * gamma(1.0 - z) * zeta(1.0 - z);
+	}
+	else if (z.real() <= 0.25) {
+		std::complex<double> a = 2.0 * std::pow(2.0 * PI, z - 1.0) * std::sin(0.5 * PI * z) * gamma(1.0 - z) * zeta(1.0 - z);
+		std::complex<double> b = a;
+		std::complex<double> tot = 0, partialTot = 1.0;
+		double div = -1, error = 0.00001, N = std::pow(error, -1 / z.real());
+		if (N <= 0.5 * std::max(460.0, 4 * z.imag() * z.imag() + 6 * z.imag())) {
+			for (double n = 1; n < 20; n++) {
+				div *= -1;
+				partialTot = div * std::pow(n, -z);
+				tot += partialTot;
+			}
+
+			b = tot / (1.0 - std::pow(2.0, 1.0 - z));
+		}
+		else {
+			int binCoeff = 1, n = 0;
+			std::complex<double> tot = 0, partialTot = 1.0;
+			double div = 0.5;
+
+			while (n <= std::max(20.0, 2 * z.imag())) {
+				partialTot = 1.0;
+				binCoeff = 1;
+				for (int k = 1; k <= n; k++) {
+					binCoeff = binCoeff * (k - n - 1) / k;
+					partialTot += ((double)binCoeff) * std::pow(k + 1.0, -z);
+				}
+				partialTot *= div;
+				tot += partialTot;
+				div *= 0.5;
+				n++;
+			}
+
+			b = tot / (1.0 - std::pow(2.0, 1.0 - z));
+		}
+
+		return 4.0 * (z.real() * a + (0.25 - z.real()) * b);
+	}
+	else if (z.real() >= 0.75 || (z.real() > 0.25 && std::abs(z.imag()) < 15)) {
+		std::complex<double> tot = 0, partialTot = 1.0;
+		double div = -1, error = 0.00001, N = std::pow(error, -1 / z.real());
+		if (N <= 0.5 * std::max(460.0, 4 * z.imag() * z.imag() + 6 * z.imag())) {
+			for (double n = 1; n < 20; n++) {
+				div *= -1;
+				partialTot = div * std::pow(n, -z);
+				tot += partialTot;
+			}
+
+			return tot / (1.0 - std::pow(2.0, 1.0 - z));
+		}
+		else {
+			int binCoeff = 1, n = 0;
+			std::complex<double> tot = 0, partialTot = 1.0;
+			double div = 0.5;
+
+			while (n <= std::max(20.0, 2 * z.imag())) {
+				partialTot = 1.0;
+				binCoeff = 1;
+				for (int k = 1; k <= n; k++) {
+					binCoeff = binCoeff * (k - n - 1) / k;
+					partialTot += ((double)binCoeff) * std::pow(k + 1.0, -z);
+				}
+				partialTot *= div;
+				tot += partialTot;
+				div *= 0.5;
+				n++;
+			}
+
+			return tot / (1.0 - std::pow(2.0, 1.0 - z));
+		}
+	}
+	else {
+		std::complex<double> chi = std::pow(2.0, z) * std::pow(PI, z - 1.0) * std::sin(0.5 * PI * z) * gamma(1.0 - z);
+		std::complex<double> a = 0.0, b = 0.0, c;
+		int max = std::floor(std::sqrt(std::abs(z.imag()) / (2.0 * PI)));
+		for (int n = 1; n <= max; n++) {
+			c = std::pow(n, z);
+			a += 1.0 / c;
+			b += c / (double)n;
+		}
+		return a + chi * b;
 	}
 }
