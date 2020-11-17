@@ -138,7 +138,7 @@ void initFunc(std::string infix) {
 //gets operation/function/number indices that can be used to isolate token 
 int getOp(std::string& infix, int n) {
 	for (int i = n + 1; i < infix.size(); i++) {
-		if (infix[i] == '\\' || infix[i] == '-' || infix[i] == '+' || infix[i] == '*' || infix[i] == '/' || infix[i] == '^' || infix[i] == '(' || infix[i] == ')') {
+		if (infix[i] == '\\' || infix[i] == '-' || infix[i] == '+' || infix[i] == '*' || infix[i] == '/' || infix[i] == '^' || infix[i] == '{' || infix[i] == '}') {
 			if (i != n + 1) {
 				return i;
 			}
