@@ -13,15 +13,11 @@ void initFunc(std::string infix) {
 	std::vector<std::string> infixVec;
 	std::stack<int> opStack;
 
+	std::replace(infix.begin(), infix.end(), '(', '{');
+	std::replace(infix.begin(), infix.end(), ')', '}');
+	
 	//Isolate each operator, function and number as an individual token string
 	for (int i = 0; i < infix.size(); i++) {
-		if (infix[i] == '(') {
-			infix[i] = '{';
-		}
-		else if (infix[i] == ')') {
-			infix[i] = '}';
-		}
-
 		if (infix[i] == '\\') {
 			int j = getOp(infix, i);
 			std::string tempStr = infix.substr(i + 1, j - i - 1);
