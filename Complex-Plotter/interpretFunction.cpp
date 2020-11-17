@@ -13,18 +13,22 @@ void initFunc(std::string infix) {
 	std::vector<std::string> infixVec;
 	std::stack<int> opStack;
 
-	std::replace(infix.begin(), infix.end(), '[', '(');
-	std::replace(infix.begin(), infix.end(), ']', ')');
-
 	//Isolate each operator, function and number as an individual token string
 	for (int i = 0; i < infix.size(); i++) {
+		if (infix[i] == '(') {
+			infix[i] = '{';
+		}
+		else if (infix[i] == ')') {
+			infix[i] = '}';
+		}
+
 		if (infix[i] == '\\') {
 			int j = getOp(infix, i);
 			std::string tempStr = infix.substr(i + 1, j - i - 1);
 			infixVec.push_back(tempStr);
 			i = j - 1;
 		}
-		else if (i > 0 && infix[i] == '-' && infix[i-1] == '(') {
+		else if (i > 0 && infix[i] == '-' && infix[i - 1] == '{') {
 			infixVec.push_back("0");
 			infixVec.push_back(infix.substr(i, 1));
 		}
@@ -38,11 +42,11 @@ void initFunc(std::string infix) {
 		}
 		else if (std::isdigit(infix[i]) || infix[i] == '.') {
 			int j = i;
-			while (j < infix.size() & (std::isdigit(infix[j]) || infix[j] == '.')) {
+			std::string tempStr = "";
+			while (j < infix.size() && (std::isdigit(infix[j]) || infix[j] == '.')) {
+				tempStr += infix[j];
 				j++;
 			}
-			std::string tempStr = infix.substr(i, j - 1);
-
 			if (j < infix.size() && infix[j] == 'i') {
 				infixVec.push_back("(0," + tempStr + ")");
 				j++;
@@ -51,6 +55,16 @@ void initFunc(std::string infix) {
 				infixVec.push_back(tempStr);
 			}
 			i = j - 1;
+		}
+		else if (infix[i] == '[') {
+			int j = i + 1;
+			std::string tempStr = "(";
+			while (infix[j] != ']') {
+				tempStr += infix[j];
+				j++;
+			}
+			infixVec.push_back(tempStr + ")");
+			i = j;
 		}
 		else {
 			infixVec.push_back(infix.substr(i, 1));
@@ -135,9 +149,9 @@ int getOp(std::string& infix, int n) {
 
 //Gets operation code
 int getOpCode(std::string& token) {
-	if (token == "(")
+	if (token == "{")
 		return -3;
-	else if (token == ")")
+	else if (token == "}")
 		return -2;
 	else if (token == "+")
 		return 0;
