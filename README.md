@@ -12,8 +12,7 @@ complex rectangle with corners a+ic, a+id, b+ic and b+id)
 
 ## Magnitude
 
-The magnitude is indicated by *value* of the color in the HSV color system, with lower value (darker shades) representing a smaller
-magnitude. In the image below, you will notice the value continuously "reseting" and creating what is perceived as levels. This is done intentionally, by taking the log of the magnitude and then taking the mod of the log magnitude. Using this approach, as opposed to just using the magnitude directly, allows for giving far more detail about the magnitude, and allows us to distinguish easily between a very large range of magnitudes. If this approach was not taken, the graph will instead have blobs of black and white near singularities and zeros, and with the bias in human color perception, little more information about magnitudes in the rest of the function could be known. Here, each "level curve", or the lines at the discontinuities of the values represent locations with the exact same magnitude. The log of the magnitude was log base 1.5, so each level is either 1.5 times larger or smaller than a level next to it. Also, by seeing where these levels converge, the exact locations of singularities (poles or essential singularities) or zeros can be found. If the levels seem to be converging towards the viewer, then it is a zero (like at the top, bottom, and three points in a triple petal formation), and if the levels seem to be sinking into the screen, it converges to a singularity (like at the center of the image, and the center of the three zeros making a petal shape).
+The magnitude is indicated by *value* of the color in the HSV color system, with lower value (darker shades) representing a smaller magnitude. In the image below, you will notice the value continuously "reseting" and creating what is perceived as levels. This is done intentionally, by taking the log of the magnitude and then taking the mod of the log magnitude. Using this approach, as opposed to just using the magnitude directly, allows for giving far more detail about the magnitude, and allows us to distinguish easily between a very large range of magnitudes. If this approach was not taken, the graph will instead have blobs of black and white near singularities and zeros, and with the bias in human color perception, little more information about magnitudes in the rest of the function could be known. Here, each "level curve", or the lines at the discontinuities of the values represent locations with the exact same magnitude. The log of the magnitude was log base 1.5, so each level is either 1.5 times larger or smaller than a level next to it. Also, by seeing where these levels converge, the exact locations of singularities (poles or essential singularities) or zeros can be found. If the levels seem to be converging towards the viewer, then it is a zero (like at the top, bottom, and three points in a triple petal formation), and if the levels seem to be sinking into the screen, it converges to a singularity (like at the center of the image, and the center of the three zeros making a petal shape).
 
 <a href="https://imgur.com/HV4QLSf"><img src="https://i.imgur.com/HV4QLSf.jpg" title="source: imgur.com" /></a>
 
@@ -81,39 +80,52 @@ domain being [`realMin`, `realMax`]×[`imagMin`, `imagMax`]. The restrictions on
 
 The step size is controlled using the argument `step`, which should be ideally much smaller than the difference between minimum and maximum quantities of both the real and imaginary domains. You can also instead use the arguments `xstep` and `ystep` for different step sizes in the two axes.
 
-The constant angle lines can be turned on or off by using either `-l t` or `-l f`, respectively. The grid can be disabled using `-l f`, and the numbers `0` to `10` instead of `f` enables a grid, with a larger number indicating a wider spaced grid. The grid parallel to the axes can be enabled or disabled by `-x t` or `-x f`. The colorscheme can be made to be either HSV or a smoother color scheme, using `-cScheme` with either `h` or `s, for the two options. The name of the saved file can be passed using `-n [name]`, where name is any valid string without spaces. By default, the name will be saved.png. Do NOT include the file extension (.png) in the name; .png will always be added by default. The help flag simply lists all the commands, and includes a link to this README for more information.
+The constant angle lines can be turned on or off by using either `-l t` or `-l f`, respectively. The grid of constant real and imaginary values can be disabled using `-l f`, and enabled by `-l n`, where `n` is any number from `0` to `10` (ex `-l 5`), with a larger number indicating a wider spaced grid. The grid parallel to the axes can be enabled or disabled by `-x t` or `-x f`. The colorscheme can be made to be either HSV or a smoother color scheme, using `-cScheme` with either `h` or `s`, for the two options. The name of the saved file can be passed using `-n [name]`, where `name` is any valid string without spaces. By default, the name will be `saved`. Do NOT include the file extension (.png) in the name; .png will always be added by default. The help flag simply lists all the commands, and includes a link to this README for more information.
 
 Passing the function is a bit more complicated, and must be done with a very specific syntax in order for the function to be properly interpreted. The parts of the function syntax are:
 * numbers
 * operators
 * brackets
 * inbuilt functions
+* summations
+* derivatives
 * the variable
 
-The syntax for numbers is simple: you can just directly write the numbers. For real numbers, -2 is simply `-2`, and 4.2347 is simply `4.2347`. There are three special numbers available: π, e and i. π can be entered as `pi`, e can be entered as `e` and i as `i`. For a complex number, you can simply write it has `a+bi`, where `a` and `b` are simply any real numbers. For example, you can enter the complex number 4.23-1.98i as `4.23-1.98i`.
+The syntax for numbers is simple: you can just directly write the numbers. For real numbers, -2 is simply `-2`, and 4.2347 is simply `4.2347`. There are three special numbers available: π, e and i. π can be entered as `pi`, e can be entered as `e` and i as `i`. For a complex number, you can simply write it has `a+bi`, where `a` and `b` are simply any real numbers. For example, you can enter the complex number 4.23-1.98i as `4.23-1.98i`. You can also optionally input a complex number a+bi as [a,b].
 
-The five operators are +, -, \*, /, and ^, for addition, subtraction, division, multiplication and exponentiation, respectively. They can be inputed without any additional arguments. For example, π+3\*4 is inputed as `pi+3*4`. Brackets are also input without any additional syntax, so (-1+e) squared is input as `(-1+e)^2`. Multiplication must always be explicitly defined using \* (for example, `5(3+1)` will not be interpreted as 5 multiplied by 3+1, it must be `5*(3+1)`). Brackets can also be input directly, as `(` or `)`. Other kinds of brackets will not work (for example do NOT use `[` or `]` as brackets). In Windows, `^` is an escape character, so `^^` must be input instead of `^`.
+The five operators are +, -, \*, /, and ^, for addition, subtraction, division, multiplication and exponentiation, respectively. They can be input without any additional arguments. For example, π+3\*4 is inputed as `pi+3*4`. Brackets are also input without any additional syntax, so (-1+e) squared is input as `(-1+e)^2`. Multiplication must always be explicitly defined using \* (for example, `5(3+1)` will not be interpreted as 5 multiplied by 3+1, it must be `5*(3+1)`). Brackets can also be input directly, as `(` or `)`. Other kinds of brackets will not work (for example do NOT use `[` or `]` as brackets). In Windows, `^` is an escape character, so `^^` must be input instead of `^`.
 
 Functions are input with a backslash, the name of the function, and followed by brackets surrounding the argument of the function. For example, sin(π/4) is `\sin(\pi/4)`. Currently, all of the inbuilt functions available are single input (no min, max or mod function for example). The list of available functions is: 
 * Miscellaneous Complex: `\Re`, `\Im`, `\abs`, `\arg`, `\conj`
-* Trigonometric Functions: `\cos`, `\sin`, `\tan`, `\sec`, `\csc`, `\cot`
-* Inverse Trigonometric Functions: `\acos`, `\asin`, `\atan`, `\asec`, `\acsc`, `\acot`
-* Hyperbolic Trigonometric Functions: `\cosh`, `\sinh`, `\tanh`, `\sech`, `\csch`, `\coth`
-* Inverse Hyperbolic Trigonometric Functions: `\acosh`, `\asinh`, `\atanh`, `\asech`, `\acsch`, `\acoth`
-* Logarithms: `\log` (base 10), `\ln` (natural logarithm)
+* Logarithms: `\log` (natural logarithm/ principal branch of complex logarithm)
 * Exponential: `\exp`
+* Trigonometric Functions: `\cos`, `\sin`, `\tan`, `\sec`, `\csc`, `\cot`
+* Inverse Trigonometric Functions: `\acos`, `\asin`, `\atan`
+* Hyperbolic Trigonometric Functions: `\cosh`, `\sinh`, `\tanh`
+* Inverse Hyperbolic Trigonometric Functions: `\acosh`, `\asinh`, `\atanh`
 * Gamma: `\gamma`
+* Airy: `\airy` (first kind), `biry` (second kind)
+* Bessel: `\besselj` (first kind), `bessely` (second kind)
+* Spherical Bessel: `\sphbesselj` (first kind), `sphbessely` (second kind)
 * Step: `\step` (step greater than equal to 0)
-*	Delta: `\delta` (1 around |z|, 0 elsewhere)
+*	Delta: `\delta` (1 around |z| = 0, 0 elsewhere)
 
-Possible functions available in the future may be square root (can currently be implemented by `^\0.5`), the Zeta function, and Bessel functions.
-NOTE: the last two ONLY work on the real component of the argument.
+Possible functions available in the future may be square root (can currently be implemented by `^\0.5`), the Zeta function and the Spherical Bessel functions. The Hankel and Modified Bessel functions can easily be implemented using expressions of the Bessel function.
+
+NOTE: Step and Delta only work on the real component of the argument.
+NOTE: All of the functions EXCEPT the Bessel functions take a single argument, for example `\exp(z^2)`, where the one argument is `z^2`. Bessel functions take two arguments, separated by a comma. The first is a real number indicating the order, and the second is any complex number as an actual argument to the function. For example J<sub>2</sub>(z) would be input as `\besselj(2,z)`.
+
+Next, a variable quantity can also be passed in, as `z`, which is what will be changed in the program to evaluate the function. It is important that the variable is always input as `z`, and nothing else (such as `x` or `s` or `w`). 
+
+Then, we can also have sums in our function (but sadly, not infinite sums). The syntax for summations is `\sum([index var];[start];[end];[inside sum])`. The index variable is simple the variable the indexes the sum. Make sure to not make this conflict with other program strings, such as `i` or `e`, which would cause the program to behave unpredictably (using `n` or `k` is always a safe choice). [start] and [end] are self explanatory. The last argument is simply what goes inside the sum. Sums can also be nested within each other. As an example, ![Equation](https://latex.codecogs.com/gif.latex?\sum_{n=1}^{10}\left(\sum_{m=1}^{n}\frac{z^{n}}{n!}\right)) can be input as `\sum(n;1;10;\sum(m;1;n;z^n/\gamma(n+1)))`, where we use the fact that the gamma function is a shift of the factorial.
+
+Lastly, we can do derivatives with respect to `z`. For any positive integer n, the nth derivative can be entered as `\diff(n;[infix expr])`, where `[infix expr]` is the expression to find the derivative for. For example, ![Equation](https://latex.codecogs.com/gif.latex?\frac{d^3}{dz^3}(z\sin{z})) can be input as `\diff(3;z*\sin(z))`. Note that the time to compute the derivative increases linearly with the order of the derivative, so for higher order derivatives, this may be very slow. Also, the derivative can be done with respect to the real axis or the imaginary axis. Instead of `z`, input `y` for imaginary axis, and `x` for real axis. Using `z` will by default do the derivative along `x`, and derivative wrt `z` only makes sense if your function is analytic.
+
+Combining the above, we can input the function graphed above as `((z+3+5i)*(z-7i)^2)*(1/z+i/(z-5-3i)^3)`. In order to obtain the plot above, the full command line argument would be `./complex_plotter -x1 -10 -x2 10 -y1 -10 -y2 10 -s 0.002604166666667 -g b -l t -f ((z+3+5i)*(z-7i)^2)*(1/z+i/(z-5-3i)^3)`. 
 
 **Important Note: Make sure there are NO SPACES anywhere in the function expression. The interpreter will assume a space to be the end of the function.**
 
-Lastly, a variable quantity can also be passed in, as `z`, which is what will be changed in the program to evaluate the function. It is important that the variable is always input as `z`, and nothing else (such as `x` or `s` or `w`). 
-
-Combining this, we can input the function graphed above as `((z+3+5i)*(z-7i)^2)*(1/z+i/(z-5-3i)^3)`. In order to obtain the plot above, the full command line argument would be `Complex-Plotter.exe -a -10 -b 10 -c -10 -d 10 -s 0.002604166666667 -g b -l t -f ((z+3+5i)*(z-7i)^2)*(1/z+i/(z-5-3i)^3)`. 
+**Important Note: If passing in the function as a command line argument, many characters are special characters and need to be escaped using a `\`. These characters include `(`, `)`, `\`, `*`, `,`.  These characters should instead be input as `\(`, `\)`, `\\`, `\*`, `\,`. As such, for long expressions, it is much easier to run the program without any command line arguments, and pass the arguments as prompted, where escaping characters is not necessary.**
 
 ### Other Details
 
@@ -201,9 +213,27 @@ Another example that illustrates where a branch cut would need to be made, along
 * ![Equation](https://latex.codecogs.com/gif.latex?\left(1&plus;z\right)\left(1&plus;0.445z&plus;z^{2}\right)\left(1&plus;1.247z&plus;z^{2}\right)\left(1&plus;1.8019z&plus;z^{2}\right))
 over [-1.5, 1.5]×[-1.5, 1.5]
 
+* ![Equation](https://latex.codecogs.com/gif.latex?\sqrt{z})
+
+The branch cuts can also be easily rotated, to get another branch cut. In this example, we see the branch cut of square root two rotated by π/6. This was done by inputing `\exp(i*pi/6)*(z*\exp(-i*pi/3))^0.5` instead of simply `z^0.5`, which would have given us the default branch cut on the negative real axis.
+
+<a href="https://imgur.com/V3XaqDo"><img src="https://i.imgur.com/jfk1M9s.png" title="source: imgur.com" /></a>
+
 The plot for the 7th degree Butterworth polynomial of a low pass Butterworth filter, with the location of the 7 zeros being seen around the high frequencies (left half of the unit circle)
 
 <a href="https://imgur.com/7VFcTRL"><img src="https://i.imgur.com/7VFcTRL.jpg" title="source: imgur.com" /></a>
+
+* ![Equation](https://latex.codecogs.com/gif.latex?\frac{d^2}{dz^2}\cos{(\pi%20z)}) on the left; ![Equation](https://latex.codecogs.com/gif.latex?-\pi^2\cos{(\pi%20z)}) on the right, both over [-1, 1]×[-1, 1]
+
+We obviously know the two equations are the exact same, but plotting the two allows us to verify that the derivative feature does work. Also, because of the function we chose, which is periodic with period 2, it almost seems as if it is one continuous function, if not for the black line.
+
+<a href="https://imgur.com/HECxjLd"><img src="https://i.imgur.com/HECxjLd.png" title="source: imgur.com" /></a>
+
+* ![Equation](https://latex.codecogs.com/gif.latex?\sum_{n=0}^{5}\frac{z^{n}}{\Gamma(n+1)) on the left; ![Equation](https://latex.codecogs.com/gif.latex?e^x) on the right, both over [-1, 1]×[-1, 1]
+
+We know that the left is the trucated Taylor series for the exponential function on the right, and we can see that they are extremely similar, allowing us to verify that our summation feature works. We can also notice the minor changes in hue near the top and bottom between the approximation and the actual exponential. Furthermore, if we zoom in very closely, we can see that for the approximation, the "vertical lines" are slightly curving. Thus, the approximation fails to be unnoticably close, in phase and magnitude, for z with a significant imaginary component, but is almost exact along the real axis.
+
+<a href="https://imgur.com/QSA5fKx"><img src="https://i.imgur.com/QSA5fKx.png" title="source: imgur.com" /></a>
 
 * ![Equation](https://latex.codecogs.com/gif.latex?\frac{\sin\left(z^{3}-1\right)}{z})
 over [-2, 2]×[-2, 2]
