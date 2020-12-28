@@ -2,18 +2,20 @@
 #include <complex>
 #include <string.h>
 #include <vector>
-#include <queue>
 #include <stack>
 #include <sstream>
 #include <iostream>
+#include <algorithm>
 
-constexpr double PI = 3.14159265358979323846;
-constexpr double E = 2.71828182845904523536;
-constexpr std::complex<double> I = std::complex<double>(0, 1.0);
+#define PI 3.14159265358979323846 // pi
+#define E 2.71828182845904523536 // Euler's number
+#define EPS 2.2204460493e-16 // machine epsilon for double precision, to help the optimal step for basic central difference numerical derivative
 
-//needed for gamma function by lanczos approx
-constexpr double p[9] = { 0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7 };
-constexpr int pSize = 9;
+const std::complex<double> I = std::complex<double>(0, 1.0);
+
+enum otherTokens { LBRACKET = -3, RBRACKET = -2, OTHER = -1 };
+enum operation { ADD, SUB, MUL, DIV, POW, RE, IM, ABS, ARG, CONJ, EXP, LOG, COS, SIN, TAN, SEC, CSC, COT, ACOS, ASIN, ATAN, COSH, SINH, TANH, ACOSH, ASINH, ATANH, STEP, DELTA, GAMMA, ZETA, DIGAMMA, AIRY, BIRY, BESSELJ, BESSELY, SPHBESSELJ, SPHBESSELY };
+enum tokenType { DIFF = -5, SUM = -4, FUNCTION = -3, BIN_OPERATOR = -2, IMMEDIATE = -1, VARIABLE = 0 };
 
 //struct used for creating postfix expression, since the expression
 //needs to handle operators, functions and numbers. I could just use
@@ -22,74 +24,21 @@ constexpr int pSize = 9;
 //this approach uses more memory but will be faster when evaluating 
 //the function expression
 struct Token {
-	int type = 0;
-	std::complex<double> num;//type = 0: constant, type1: variable (z)
-	int op;//type = 2: function, type = 3: operator
-
-	/*
-	op codes:
-	-3 - (
-	-2 - )
-
-	-1 - not an operator or function or ()
-
-	0  - (+)
-	1  - (-)
-	2  - (*)
-	3  - (/)
-	4  - (^)
-
-	5  - Re(z)
-	6  - Im(z)
-	7  - abs(z)
-	8  - arg(z)
-	9  - conj(z)
-
-	10  - cos(z)
-	11 - sin(z)
-	12 - tan(z)
-	13 - sec(z)
-	14 - csc(z)
-	15 - cot(z)
-
-	16 - acos(z)
-	17 - asin(z)
-	18 - atan(z)
-	19 - asec(z)
-	20 - acsc(z)
-	21 - acot(z)
-
-	22 - cosh(z)
-	23 - sinh(z)
-	24 - tanh(z)
-	25 - sech(z)
-	26 - csch(z)
-	27 - coth(z)
-
-	28 - acosh(z)
-	29 - asinh(z)
-	30 - atanh(z)
-	31 - asech(z)
-	32 - acsch(z)
-	33 - acoth(z)
-
-	34 - exp(z)
-	35 - ln(z)
-	36 - log(z) (base 10)
-
-	37 - step(|z|) (step greater than equal to 0)
-	38 - delta(|z|) (1 around |z|, 0 elsewhere)
-
-	39 - gamma(z)
-	*/
+    int type = 0;
+    std::complex<double> num; //if type >= -1
+    int op; //operation if tokenType = FUNCTION or BIN_OPERATOR, variable name if tokenType = SUM, order of derivative if tokenType = DIFF
+    std::vector<int> coeffs; //bounds if tokenType = SUM, finite difference derivative coeffs f tokenType = DIFF
+    std::vector<Token> postfix; //if tokenType = SUM
 };
 
 void setStep(double argstep);
 void initFunc(std::string infix);
-int getOpCode(std::string& token);
-int getOp(std::string& infix, int n); 
+std::vector<Token> parseFunc(std::string infix);
+std::vector<std::string> getInfixVec(std::string infix);
+std::vector<int> getFiniteDiffCoeffs(int order);
+int getOpCode(std::string token);
+int getOp(std::string& infix, int n);
 std::complex<double> f(std::complex<double> z);
+std::complex<double> f(std::vector<Token>& postfix);
 std::complex<double> evalFunc(int opCode, std::complex<double> z);
-std::complex<double> gamma(std::complex<double> z);
-std::complex<double> zeta(std::complex<double> z);
-//std::complex<double> bessel_J(int alpha, std::complex<double> z);
+std::complex<double> evalFuncTwoArg(int opcode, std::complex<double> arg1, std::complex<double> arg2);

@@ -172,6 +172,7 @@
     <ClInclude Include="interpretFunction.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="specialFunctions.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Complex-Plotter.cpp" />
@@ -182,6 +183,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="specialFunctions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Complex-Plotter.rc" />

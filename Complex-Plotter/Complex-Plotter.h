@@ -4,6 +4,7 @@
 #include <complex>
 #include <math.h>
 #include <time.h>
+#include <iostream>
 
 int plot_func(int realNum, int imagNum, double realMin, double imagMin, double xstep, double ystep, bool equiAngleLines, int lineType, bool axis, int colorScheme, cv::Mat& plot);
 int hsvToRGB(int n, double H, double S, double V);
